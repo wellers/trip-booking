@@ -1,23 +1,32 @@
-﻿using TripBooking.Dtos;
+﻿using Microsoft.EntityFrameworkCore;
+using TripBooking.Data.Dtos;
 
 namespace TripBooking.Data;
 
-public class DataGenerator
+public static class DataGenerator
 {
-	public static void Initialise(IServiceProvider serviceProvider)
+	public static async void Initialise()
 	{
-		using var context = new TripsDbContext();
-		var trips = new List<Trip>
+		await using var context = new InMemoryDbContext();
+		
+		var trip = new Trip
 		{
-			new()
-			{
-				Id = 1,
-				Name = "Trip1",
-				Description = "This is an awesome trip",
-				Country = "United Kingdom"
-			}
+			Name = "Trip1",
+			Description = "This is an awesome trip",
+			Country = "United Kingdom"
 		};
-		context.Trips.AddRangeAsync(trips);
-		context.SaveChangesAsync();
+		
+		await context.Trips.AddRangeAsync(trip);
+		await context.SaveChangesAsync();
+		
+		var registration = new Registration
+		{
+			FullName = "Testy McTest",
+			TripId = trip.Id,
+			Trip = trip
+		};
+
+		await context.Registrations.AddRangeAsync(registration);
+		await context.SaveChangesAsync();
 	}
 }

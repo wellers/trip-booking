@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<ITripRepository, TripRepository>();
+builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,16 +23,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.Run();
+DataGenerator.Initialise();
 
-await using var scope = app.Services.CreateAsyncScope();
-var services = scope.ServiceProvider;
-var context = services.GetRequiredService<TripsDbContext>();
-DataGenerator.Initialise(services);
+app.Run();

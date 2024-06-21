@@ -1,4 +1,4 @@
-﻿namespace TripBooking.Dtos;
+﻿namespace TripBooking.Data.Dtos;
 
 public class Trip
 {
@@ -6,4 +6,5 @@ public class Trip
 	public string? Name { get; set; }
 	public string? Description { get; set; }
 	public string? Country { get; set; }
+	public ICollection<Registration> Registrations { get; set; } = [];
 }
