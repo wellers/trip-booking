@@ -16,18 +16,18 @@ public class InMemoryDbContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
-        
+		
 		modelBuilder.Entity<Trip>()
-            .HasMany(t => t.Registrations)
-            .WithOne(r => r.Trip)
-            .HasForeignKey(r => r.TripId);
-        
-        modelBuilder.Entity<Trip>()
-            .Property(t => t.Id)
-            .ValueGeneratedOnAdd();
+			.HasMany(t => t.Registrations)
+			.WithOne(r => r.Trip)
+			.HasForeignKey(r => r.TripId);
+		
+		modelBuilder.Entity<Trip>()
+			.Property(t => t.Id)
+			.ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<Registration>()
-            .Property(r => r.Id)
-            .ValueGeneratedOnAdd();
+		modelBuilder.Entity<Registration>()
+			.Property(r => r.Id)
+			.ValueGeneratedOnAdd();
 	}
 }
