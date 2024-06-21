@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using TripBooking.Api.Models;
 using TripBooking.Data.Repositories;
-using TripBooking.Models;
 
-namespace TripBooking.Controllers
+namespace TripBooking.Api.Controllers
 {
 	[ApiController]
 	[Route("/api/v1/trips")]
@@ -36,23 +36,21 @@ namespace TripBooking.Controllers
 				Country = trip.Country
 			});
 			
-			var message = result
-				? "Trip successfully updated."
-				: "Trip failed to update";
+			if (!result)
+				return NotFound();
 			
-			return Ok(message);
+			return Ok("Trip successfully updated.");
 		}
 		
-		[HttpDelete("{id:}")]
+		[HttpDelete("{id::int}")]
 		public async ValueTask<IActionResult?> DeleteAsync(int id)
 		{
 			var result = await tripRepository.DeleteTripAsync(id);
 
-			var message = result
-				? "Trip successfully deleted."
-				: "Trip failed to delete";
+			if (!result)
+				return NotFound();
 			
-			return Ok(message);
+			return Ok("Trip successfully deleted.");
 		}
 		
 		[HttpGet("{id:int}")]

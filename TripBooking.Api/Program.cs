@@ -1,3 +1,4 @@
+using TripBooking.Api.Exceptions;
 using TripBooking.Data;
 using TripBooking.Data.Repositories;
 
@@ -19,6 +20,8 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

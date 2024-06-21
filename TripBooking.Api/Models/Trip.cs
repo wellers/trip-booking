@@ -1,4 +1,4 @@
-﻿namespace TripBooking.Models;
+﻿namespace TripBooking.Api.Models;
 
 public class Trip
 {
