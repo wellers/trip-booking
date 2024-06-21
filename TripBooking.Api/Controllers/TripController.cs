@@ -25,7 +25,7 @@ namespace TripBooking.Api.Controllers
 			return Ok(message);
 		}
 		
-		[HttpPut("{id:}")]
+		[HttpPut("{id:int}")]
 		public async ValueTask<IActionResult?> UpdateAsync(int id, [FromBody] Trip trip)
 		{
 			var result = await tripRepository.UpdateTripAsync(new Dtos.Trip
@@ -42,7 +42,7 @@ namespace TripBooking.Api.Controllers
 			return Ok("Trip successfully updated.");
 		}
 		
-		[HttpDelete("{id::int}")]
+		[HttpDelete("{id:int}")]
 		public async ValueTask<IActionResult?> DeleteAsync(int id)
 		{
 			var result = await tripRepository.DeleteTripAsync(id);
