@@ -1,33 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using TripBooking.Data.Dtos;
 
 namespace TripBooking.Data.Repositories;
 
 public class TripRepository : ITripRepository
 {
+	private static IIncludableQueryable<Trip, ICollection<Registration>> AllTripsWithRegistrations(InMemoryDbContext context)
+	{
+		return context.Trips
+			.Include(t => t.Registrations);
+	}
+	
 	public async Task<List<Trip>> GetTripsAsync()
 	{
 		await using var context = new InMemoryDbContext();
-		var list = await context.Trips
-			.Include(t => t.Registrations)
-			.ToListAsync();
+		var list = await AllTripsWithRegistrations(context).ToListAsync();
 		return list;
 	}
 
 	public async Task<Trip?> GetTripByIdAsync(int id)
 	{
 		await using var context = new InMemoryDbContext();
-		var item = await context.Trips
-			.Include(t => t.Registrations)
-			.SingleOrDefaultAsync(trip => trip.Id == id);
+		var item = await AllTripsWithRegistrations(context).SingleOrDefaultAsync(trip => trip.Id == id);
 		return item;
 	}
 	
 	public async Task<List<Trip>> GetTripsByCountryAsync(string country)
 	{
 		await using var context = new InMemoryDbContext();
-		var list = await context.Trips
-			.Include(trip => trip.Registrations)
+		var list = await AllTripsWithRegistrations(context)
 			.Where(trip => trip.Country == country)
 			.ToListAsync();
 		return list;
