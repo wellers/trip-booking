@@ -1,8 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using TripBooking.Api.Exceptions;
 using TripBooking.Data;
 using TripBooking.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("TripBookingDb"));
 
 // Add services to the container.
 builder.Services.AddScoped<ITripRepository, TripRepository>();
@@ -27,6 +30,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-DataGenerator.Initialise();
+using (var scope = app.Services.CreateScope())
+{
+	var context = scope.ServiceProvider.GetRequiredService<BaseDbContext>();
+	await DataGenerator.InitialiseAsync(context);
+}
 
 app.Run();

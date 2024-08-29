@@ -5,9 +5,9 @@ namespace TripBooking.Data;
 
 public static class DataGenerator
 {
-	public static async void Initialise()
+	public static async Task InitialiseAsync(BaseDbContext context)
 	{
-		await using var context = new InMemoryDbContext();
+		await context.Database.EnsureCreatedAsync();
 		
 		var trip = new Trip
 		{

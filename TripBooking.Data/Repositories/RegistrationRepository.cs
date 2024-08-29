@@ -3,11 +3,10 @@ using TripBooking.Data.Dtos;
 
 namespace TripBooking.Data.Repositories;
 
-public class RegistrationRepository : IRegistrationRepository
+public class RegistrationRepository(BaseDbContext context) : IRegistrationRepository
 {
 	public async Task<List<Registration>> GetRegistrationsAsync()
 	{
-		await using var context = new InMemoryDbContext();
 		var list = await context.Registrations
 			.Include(r => r.Trip)
 			.ToListAsync();
@@ -16,8 +15,6 @@ public class RegistrationRepository : IRegistrationRepository
 	
 	public async Task<bool> AddRegistrationAsync(Registration registration)
 	{
-		await using var context = new InMemoryDbContext();
-		
 		await context.Registrations.AddAsync(registration);
 		
 		var changes = await context.SaveChangesAsync();
