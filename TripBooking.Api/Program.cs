@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TripBooking.Api.Exceptions;
 using TripBooking.Data;
 using TripBooking.Data.Repositories;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +19,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+	app.UseSwagger(options =>
+	{
+		options.RouteTemplate = "openapi/{documentName}.json";
+	});
+	app.MapScalarApiReference();
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
