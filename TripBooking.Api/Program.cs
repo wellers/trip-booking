@@ -6,7 +6,7 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Awap for actual SQL database
+// Swap for actual SQL database
 builder.Services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("TripBookingDb"));
 
 builder.Services.AddScoped<ITripRepository, TripRepository>();
@@ -34,7 +34,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 #if DEBUG
-// set-up test data
+// Set-up test data
 using (var scope = app.Services.CreateScope())
 {
 	var context = scope.ServiceProvider.GetRequiredService<BaseDbContext>();
