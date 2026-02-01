@@ -6,14 +6,14 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Awap for actual SQL database
 builder.Services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("TripBookingDb"));
 
-// Add services to the container.
 builder.Services.AddScoped<ITripRepository, TripRepository>();
 builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -33,10 +33,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+#if DEBUG
+// set-up test data
 using (var scope = app.Services.CreateScope())
 {
 	var context = scope.ServiceProvider.GetRequiredService<BaseDbContext>();
 	await DataGenerator.InitialiseAsync(context);
 }
+#endif
 
 app.Run();
