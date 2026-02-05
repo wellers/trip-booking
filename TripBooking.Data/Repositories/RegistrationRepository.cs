@@ -5,19 +5,18 @@ namespace TripBooking.Data.Repositories;
 
 public class RegistrationRepository(BaseDbContext context) : IRegistrationRepository
 {
-	public async Task<List<Registration>> GetRegistrationsAsync()
+	public async Task<List<Registration>> GetRegistrationsAsync(CancellationToken token) => 
+		await context.Registrations.Include(r => r.Trip).ToListAsync(token);
+
+	public async Task<Registration> AddRegistrationAsync(Registration registration, CancellationToken token)
 	{
-		var list = await context.Registrations
-			.Include(r => r.Trip)
-			.ToListAsync();
-		return list;
+		await context.Registrations.AddAsync(registration, token);
+		await context.SaveChangesAsync(token);
+
+		return registration;
 	}
-	
-	public async Task<bool> AddRegistrationAsync(Registration registration)
-	{
-		await context.Registrations.AddAsync(registration);
-		
-		var changes = await context.SaveChangesAsync();
-		return changes > 0;
-	}
+
+	public async Task<Registration?> GetRegistrationsByIdAsync(int id, CancellationToken token) => await context.Registrations
+		.Include(r => r.Trip)
+		.SingleOrDefaultAsync(r => r.Id == id, token);
 }

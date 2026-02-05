@@ -5,13 +5,13 @@ using TripBooking.Data.Repositories;
 namespace TripBooking.Api.Controllers;
 
 [ApiController]
-[Route("/api/v1/register")]
+[Route("api/v1/register")]
 public class RegisterController(ITripRepository tripRepository, IRegistrationRepository registrationRepository) : ControllerBase
 {
 	[HttpPost]
-	public async ValueTask<IActionResult?> CreateAsync(Registration registration)
+	public async Task<IActionResult> CreateAsync(Registration registration, CancellationToken token)
 	{
-		var trip = await tripRepository.GetTripByIdAsync(registration.TripId);
+		var trip = await tripRepository.GetTripByIdAsync(registration.TripId, token);
 
 		if (trip is null)
 			return NotFound();
@@ -22,20 +22,30 @@ public class RegisterController(ITripRepository tripRepository, IRegistrationRep
 			Trip = trip
 		};
 		
-		var result = await registrationRepository.AddRegistrationAsync(newRegistration);
-		
-		var message = result
-			? "Registration successfully created."
-			: "Registration failed to create";
-			
-		return Ok(message);
+		var created = await registrationRepository.AddRegistrationAsync(newRegistration, token);
+
+		if (created is null)
+			return BadRequest();
+
+		return CreatedAtRoute("GetRegistrationById", new { id = created.Id }, RegistrationResponse.FromDto(created));
 	}
 	
 	[HttpGet]
-	public async ValueTask<IActionResult?> GetAllAsync()
+	public async Task<IActionResult> GetAllAsync(CancellationToken token)
 	{
-		var list = await registrationRepository.GetRegistrationsAsync();
+		var list = await registrationRepository.GetRegistrationsAsync(token);
 			
 		return Ok(list.Select(RegistrationResponse.FromDto));
+	}
+
+	[HttpGet("{id:int}", Name = "GetRegistrationById")]
+	public async Task<IActionResult> GetByIdAsync(int id, CancellationToken token = default)
+	{
+		var item = await registrationRepository.GetRegistrationsByIdAsync(id, token);
+
+		if (item is null)
+			return NotFound();
+
+		return Ok(RegistrationResponse.FromDto(item));
 	}
 }

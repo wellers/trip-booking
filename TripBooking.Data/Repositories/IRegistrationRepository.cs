@@ -4,6 +4,7 @@ namespace TripBooking.Data.Repositories;
 
 public interface IRegistrationRepository
 {
-	public Task<List<Registration>> GetRegistrationsAsync();
-	public Task<bool> AddRegistrationAsync(Registration registration);
+	public Task<List<Registration>> GetRegistrationsAsync(CancellationToken token);
+	public Task<Registration> AddRegistrationAsync(Registration registration, CancellationToken token);
+	public Task<Registration?> GetRegistrationsByIdAsync(int id, CancellationToken token);
 }
