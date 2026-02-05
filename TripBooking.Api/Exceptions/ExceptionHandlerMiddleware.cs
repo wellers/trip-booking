@@ -23,7 +23,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
 			await SetErrorRequest(httpContext, "An internal server error has occurred.");
 			throw;
 		}
-		catch (Exception e)
+		catch
 		{
 			await SetErrorRequest(httpContext, "An internal server error has occurred.");
 			throw;

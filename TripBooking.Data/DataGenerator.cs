@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TripBooking.Data.Dtos;
+﻿using TripBooking.Data.Dtos;
 
 namespace TripBooking.Data;
 
