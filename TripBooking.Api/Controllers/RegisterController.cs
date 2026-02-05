@@ -9,7 +9,7 @@ namespace TripBooking.Api.Controllers;
 public class RegisterController(ITripRepository tripRepository, IRegistrationRepository registrationRepository) : ControllerBase
 {
 	[HttpPost]
-	public async Task<IActionResult> CreateAsync(Registration registration, CancellationToken token)
+	public async Task<IActionResult> CreateAsync([FromBody] Registration registration, CancellationToken token)
 	{
 		var trip = await tripRepository.GetTripByIdAsync(registration.TripId, token);
 
