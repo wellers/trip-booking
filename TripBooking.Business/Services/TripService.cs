@@ -4,7 +4,7 @@ namespace TripBooking.Business.Services
 {
 	public class TripService(ITripRepository tripRepository) : ITripService
 	{
-		public async Task<Shared.Response.Trip?> CreateTripAsync(Shared.Dtos.Trip trip, CancellationToken token)
+		public async Task<Shared.Response.Trip?> CreateTripAsync(Shared.Request.Trip trip, CancellationToken token)
 		{
 			var created = await tripRepository.AddTripAsync(new Data.Entities.Trip
 			{
@@ -16,7 +16,7 @@ namespace TripBooking.Business.Services
 			return created is null ? null : Shared.Response.Trip.FromDto(created);
 		}
 
-		public async Task<bool> UpdateTripAsync(int id, Shared.Dtos.Trip trip, CancellationToken token) => await tripRepository.UpdateTripAsync(new Data.Entities.Trip
+		public async Task<bool> UpdateTripAsync(int id, Shared.Request.Trip trip, CancellationToken token) => await tripRepository.UpdateTripAsync(new Data.Entities.Trip
 		{
 			Id = id,
 			Name = trip.Name,
@@ -24,7 +24,7 @@ namespace TripBooking.Business.Services
 			Country = trip.Country
 		}, token);
 
-		public async Task<bool> PatchTripAsync(int id, Shared.Dtos.Trip trip, CancellationToken token) => await tripRepository.PatchTripAsync(new Data.Entities.Trip
+		public async Task<bool> PatchTripAsync(int id, Shared.Request.Trip trip, CancellationToken token) => await tripRepository.PatchTripAsync(new Data.Entities.Trip
 		{
 			Id = id,
 			Name = trip.Name,

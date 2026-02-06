@@ -4,7 +4,7 @@ namespace TripBooking.Business.Services
 {
 	public class RegistrationService(IRegistrationRepository registrationRepository, ITripRepository tripRepository) : IRegistrationService
 	{
-		public async Task<Shared.Response.Registration?> CreateRegistrationAsync(Shared.Dtos.Registration registration, CancellationToken token)
+		public async Task<Shared.Response.Registration?> CreateRegistrationAsync(Shared.Request.Registration registration, CancellationToken token)
 		{
 			var trip = await tripRepository.GetTripByIdAsync(registration.TripId, token);
 

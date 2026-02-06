@@ -1,4 +1,4 @@
-﻿namespace TripBooking.Shared.Dtos;
+﻿namespace TripBooking.Shared.Request;
 
 public class Registration
 {
