@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using TripBooking.Api.Models;
-using TripBooking.Data.Repositories;
+using TripBooking.Business.Services;
+using TripBooking.Shared;
 
 namespace TripBooking.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/trips")]
-public class TripController(ITripRepository tripRepository) : ControllerBase
+public class TripController(ITripService tripService) : ControllerBase
 {
 	[HttpPost]
 	public async Task<IActionResult> CreateAsync([FromBody] Trip trip, CancellationToken token)
 	{
-		var created = await tripRepository.AddTripAsync(new Data.Dtos.Trip
-		{
-			Name = trip.Name, 
-			Description = trip.Description, 
-			Country = trip.Country
-		}, token);
+		var created = await tripService.CreateTripAsync(trip, token);
 
 		if (created is null)
 			return BadRequest("Trip failed to create.");
 
-		return CreatedAtRoute("GetTripById", new { id = created.Id }, TripResponse.FromDto(created));
+		return CreatedAtRoute("GetTripById", new { id = created.Id }, created);
 	}
 		
 	[HttpPut("{id:int}")]
@@ -30,15 +25,9 @@ public class TripController(ITripRepository tripRepository) : ControllerBase
 		if (trip is null) 
 			return BadRequest();
 
-		var result = await tripRepository.PatchTripAsync(new Data.Dtos.Trip
-		{
-			Id = id, 
-			Name = trip.Name, 
-			Description = trip.Description, 
-			Country = trip.Country
-		}, token);
+		var updated = await tripService.UpdateTripAsync(id, trip, token);
 			
-		if (!result) 
+		if (!updated) 
 			return NotFound();
 
 		return NoContent();
@@ -50,15 +39,9 @@ public class TripController(ITripRepository tripRepository) : ControllerBase
 		if (trip is null)
 			return BadRequest();
 
-		var result = await tripRepository.PatchTripAsync(new Data.Dtos.Trip
-		{
-			Id = id,
-			Name = trip.Name,
-			Description = trip.Description,
-			Country = trip.Country
-		}, token);
+		var patched = await tripService.PatchTripAsync(id, trip, token);
 
-		if (!result)
+		if (!patched)
 			return NotFound();
 
 		return NoContent();
@@ -67,9 +50,9 @@ public class TripController(ITripRepository tripRepository) : ControllerBase
 	[HttpDelete("{id:int}")]
 	public async Task<IActionResult> DeleteAsync(int id, CancellationToken token)
 	{
-		var result = await tripRepository.DeleteTripAsync(id, token);
+		var deleted = await tripService.DeleteTripAsync(id, token);
 
-		if (!result)
+		if (!deleted)
 			return NotFound();
 			
 		return NoContent();
@@ -78,27 +61,25 @@ public class TripController(ITripRepository tripRepository) : ControllerBase
 	[HttpGet("{id:int}", Name = "GetTripById")]
 	public async Task<IActionResult> GetByIdAsync(int id, CancellationToken token = default)
 	{
-		var item = await tripRepository.GetTripByIdAsync(id, token);
+		var trip = await tripService.GetTripByIdAsync(id, token);
 
-		if (item is null)
+		if (trip is null)
 			return NotFound();
 		
-		return Ok(TripResponse.FromDto(item));
+		return Ok(trip);
 	}
 		
 	[HttpGet("{country}")]
 	public async Task<IActionResult> GetByCountryAsync(string country, CancellationToken token)
 	{
-		var list = await tripRepository.GetTripsByCountryAsync(country, token);
-			
-		return Ok(list.Select(TripResponse.FromDto));
+		var trips = await tripService.GetTripsByCountryAsync(country, token);
+		return Ok(trips);
 	}
 		
 	[HttpGet]
 	public async Task<IActionResult> GetAllAsync(CancellationToken token)
 	{
-		var list = await tripRepository.GetTripsAsync(token);
-			
-		return Ok(list.Select(TripResponse.FromDto));
+		var trips = await tripService.GetTripsAsync(token);
+		return Ok(trips);
 	}
 }

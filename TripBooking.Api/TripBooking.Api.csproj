@@ -13,7 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TripBooking.Data\TripBooking.Data.csproj" />
+    <ProjectReference Include="..\TripBooking.Business\TripBooking.Business.csproj" />
+    <ProjectReference Include="..\TripBooking.Shared\TripBooking.Shared.csproj" />
   </ItemGroup>
 
 </Project>

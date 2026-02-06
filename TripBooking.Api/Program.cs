@@ -3,6 +3,7 @@ using TripBooking.Api.Exceptions;
 using TripBooking.Data;
 using TripBooking.Data.Repositories;
 using Scalar.AspNetCore;
+using TripBooking.Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatab
 
 builder.Services.AddScoped<ITripRepository, TripRepository>();
 builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
+builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 
 builder.Services.AddControllers();
 

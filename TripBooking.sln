@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripBooking.Api", "TripBook
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripBooking.Data", "TripBooking.Data\TripBooking.Data.csproj", "{D54D5A22-83E8-4AB8-AFB1-171889E5C15D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripBooking.Business", "TripBooking.Business\TripBooking.Business.csproj", "{994359AF-A215-4DA9-AD48-7855F04C8F22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripBooking.Shared", "TripBooking.Shared\TripBooking.Shared.csproj", "{68FCBD2B-DB41-4E34-A8E2-FE59B2B2ECA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{D54D5A22-83E8-4AB8-AFB1-171889E5C15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D54D5A22-83E8-4AB8-AFB1-171889E5C15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D54D5A22-83E8-4AB8-AFB1-171889E5C15D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{994359AF-A215-4DA9-AD48-7855F04C8F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{994359AF-A215-4DA9-AD48-7855F04C8F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{994359AF-A215-4DA9-AD48-7855F04C8F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{994359AF-A215-4DA9-AD48-7855F04C8F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68FCBD2B-DB41-4E34-A8E2-FE59B2B2ECA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68FCBD2B-DB41-4E34-A8E2-FE59B2B2ECA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68FCBD2B-DB41-4E34-A8E2-FE59B2B2ECA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68FCBD2B-DB41-4E34-A8E2-FE59B2B2ECA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

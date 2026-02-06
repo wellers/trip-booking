@@ -1,51 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
-using TripBooking.Api.Models;
-using TripBooking.Data.Repositories;
+using TripBooking.Business.Services;
+using TripBooking.Shared;
 
 namespace TripBooking.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/register")]
-public class RegisterController(ITripRepository tripRepository, IRegistrationRepository registrationRepository) : ControllerBase
+public class RegisterController(IRegistrationService registrationService) : ControllerBase
 {
 	[HttpPost]
 	public async Task<IActionResult> CreateAsync([FromBody] Registration registration, CancellationToken token)
 	{
-		var trip = await tripRepository.GetTripByIdAsync(registration.TripId, token);
-
-		if (trip is null)
-			return NotFound();
-
-		var newRegistration = new Data.Dtos.Registration
-		{
-			FullName = registration.FullName,
-			Trip = trip
-		};
-		
-		var created = await registrationRepository.AddRegistrationAsync(newRegistration, token);
+		var created = await registrationService.CreateRegistrationAsync(registration, token);
 
 		if (created is null)
 			return BadRequest();
 
-		return CreatedAtRoute("GetRegistrationById", new { id = created.Id }, RegistrationResponse.FromDto(created));
+		return CreatedAtRoute("GetRegistrationById", new { id = created.Id }, created);
 	}
 	
 	[HttpGet]
 	public async Task<IActionResult> GetAllAsync(CancellationToken token)
 	{
-		var list = await registrationRepository.GetRegistrationsAsync(token);
+		var registrations = await registrationService.GetRegistrationsAsync(token);
 			
-		return Ok(list.Select(RegistrationResponse.FromDto));
+		return Ok(registrations);
 	}
 
 	[HttpGet("{id:int}", Name = "GetRegistrationById")]
 	public async Task<IActionResult> GetByIdAsync(int id, CancellationToken token = default)
 	{
-		var item = await registrationRepository.GetRegistrationsByIdAsync(id, token);
+		var registration = await registrationService.GetRegistrationByIdAsync(id, token);
 
-		if (item is null)
+		if (registration is null)
 			return NotFound();
 
-		return Ok(RegistrationResponse.FromDto(item));
+		return Ok(registration);
 	}
 }
