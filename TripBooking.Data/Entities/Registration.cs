@@ -1,4 +1,4 @@
-﻿namespace TripBooking.Data.Dtos;
+﻿namespace TripBooking.Data.Entities;
 
 public class Registration
 {

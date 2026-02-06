@@ -1,4 +1,4 @@
-﻿namespace TripBooking.Shared;
+﻿namespace TripBooking.Shared.Dtos;
 
 public class Trip
 {

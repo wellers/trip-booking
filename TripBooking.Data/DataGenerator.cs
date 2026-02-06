@@ -1,4 +1,4 @@
-﻿using TripBooking.Data.Dtos;
+﻿using TripBooking.Data.Entities;
 
 namespace TripBooking.Data;
 

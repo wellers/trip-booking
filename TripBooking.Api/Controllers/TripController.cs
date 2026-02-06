@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TripBooking.Business.Services;
-using TripBooking.Shared;
+using TripBooking.Shared.Dtos;
 
 namespace TripBooking.Api.Controllers;
 

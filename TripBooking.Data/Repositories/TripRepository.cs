@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using TripBooking.Data.Dtos;
+using TripBooking.Data.Entities;
 
 namespace TripBooking.Data.Repositories;
 
