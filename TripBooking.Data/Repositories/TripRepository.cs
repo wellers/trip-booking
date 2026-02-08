@@ -18,11 +18,7 @@ public class TripRepository(BaseDbContext context) : ITripRepository
 		return list;
 	}
 
-	public async Task<Trip?> GetTripByIdAsync(int id, CancellationToken token)
-	{
-		var item = await AllTripsWithRegistrations(context).SingleOrDefaultAsync(trip => trip.Id == id, token);
-		return item;
-	}
+	public async Task<Trip?> GetTripByIdAsync(int id, CancellationToken token) => await AllTripsWithRegistrations(context).SingleOrDefaultAsync(trip => trip.Id == id, token);
 	
 	public async Task<List<Trip>> GetTripsByCountryAsync(string country, CancellationToken token)
 	{
