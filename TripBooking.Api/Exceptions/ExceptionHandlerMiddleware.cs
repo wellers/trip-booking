@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
@@ -52,7 +52,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
 		await SetProblemDetailsResponse(httpContext, title, message, 500);
 	}
 
-	private static async Task SetProblemDetailsResponse(HttpContext httpContext, string title, string message, int statusCode)
+	private static async Task SetProblemDetailsResponse(HttpContext httpContext, string title, string? message, int statusCode)
 	{
 		httpContext.Response.StatusCode = statusCode;
 

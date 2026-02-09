@@ -14,7 +14,7 @@ public class RegisterController(IRegistrationService registrationService) : Cont
 		var created = await registrationService.CreateRegistrationAsync(registration, token);
 
 		if (created is null)
-			return BadRequest();
+			return BadRequest(new { message = "Registration failed to create." });
 
 		return CreatedAtRoute("GetRegistrationById", new { id = created.Id }, created);
 	}

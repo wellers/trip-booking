@@ -14,7 +14,7 @@ public class TripController(ITripService tripService) : ControllerBase
 		var created = await tripService.CreateTripAsync(trip, token);
 
 		if (created is null)
-			return BadRequest("Trip failed to create.");
+			return BadRequest(new { message = "Trip failed to create." });
 
 		return CreatedAtRoute("GetTripById", new { id = created.Id }, created);
 	}
@@ -23,7 +23,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	public async Task<IActionResult> UpdateAsync(int id, [FromBody] Trip trip, CancellationToken token)
 	{
 		if (trip is null) 
-			return BadRequest();
+			return BadRequest(new { message = "Trip payload is required." });
 
 		var updated = await tripService.UpdateTripAsync(id, trip, token);
 			
@@ -37,7 +37,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	public async Task<IActionResult> PatchAsync(int id, [FromBody] Trip trip, CancellationToken token)
 	{
 		if (trip is null)
-			return BadRequest();
+			return BadRequest(new { message = "Trip payload is required." });
 
 		var patched = await tripService.PatchTripAsync(id, trip, token);
 
