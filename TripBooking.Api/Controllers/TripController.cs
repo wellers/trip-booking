@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using TripBooking.Business.Services;
 using TripBooking.Shared.Request;
@@ -5,7 +6,8 @@ using TripBooking.Shared.Request;
 namespace TripBooking.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/trips")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class TripController(ITripService tripService) : ControllerBase
 {
 	[HttpPost]
@@ -70,7 +72,16 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 		
 	[HttpGet("{country}")]
+	[MapToApiVersion("1.0")]
 	public async Task<IActionResult> GetByCountryAsync(string country, CancellationToken token)
+	{
+		var trips = await tripService.GetTripsByCountryAsync(country, token);
+		return Ok(trips);
+	}
+
+	[HttpGet("search")]
+	[MapToApiVersion("2.0")]
+	public async Task<IActionResult> SearchByCountryAsync([FromQuery] string country, CancellationToken token)
 	{
 		var trips = await tripService.GetTripsByCountryAsync(country, token);
 		return Ok(trips);

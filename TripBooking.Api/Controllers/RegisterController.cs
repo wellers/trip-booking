@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using TripBooking.Business.Services;
 using TripBooking.Shared.Request;
@@ -5,7 +6,8 @@ using TripBooking.Shared.Request;
 namespace TripBooking.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/register")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class RegisterController(IRegistrationService registrationService) : ControllerBase
 {
 	[HttpPost]
