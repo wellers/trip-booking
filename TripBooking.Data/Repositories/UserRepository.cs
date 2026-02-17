@@ -10,7 +10,10 @@ public class UserRepository(BaseDbContext context) : IUserRepository
 	public async Task SetRefreshTokenAsync(int userId, string refreshToken, DateTime expiry, CancellationToken token)
 	{
 		var user = await context.Users.FindAsync(new object[] { userId }, token);
-		if (user == null) return;
+		
+		if (user == null) 
+			return;
+
 		user.RefreshToken = refreshToken;
 		user.RefreshTokenExpiry = expiry;
 		await context.SaveChangesAsync(token);
