@@ -11,7 +11,7 @@ namespace TripBooking.Api.Controllers;
 [Route("api/v{version:apiVersion}/auth")]
 [ApiVersion("1.0")]
 public class AuthController(ILogger<AuthController> logger, IConfiguration configuration, IUserService userService) : ControllerBase
-{	
+{
 	private readonly string JwtSecret = configuration["Jwt:Secret"] ?? throw new ArgumentNullException("Jwt:Secret");
 
 	[HttpPost("login")]
@@ -27,6 +27,9 @@ public class AuthController(ILogger<AuthController> logger, IConfiguration confi
 
 		var accessToken = TokenUtils.GenerateAccessToken(user, JwtSecret);
 		var refreshToken = TokenUtils.GenerateRefreshToken();
+		var refreshExpiry = DateTime.UtcNow.AddDays(7);
+
+		await userService.SetRefreshTokenAsync(user.Id, refreshToken, refreshExpiry, token);
 
 		var response = new Token
 		{
@@ -38,14 +41,26 @@ public class AuthController(ILogger<AuthController> logger, IConfiguration confi
 	}
 
 	[HttpPost("refresh")]
-	public IActionResult Refresh([FromBody] Token tokenResponse)
+	public async Task<IActionResult> Refresh([FromBody] Token tokenResponse, CancellationToken token)
 	{
-		var newAccessToken = TokenUtils.GenerateAccessTokenFromRefreshToken(tokenResponse.RefreshToken, JwtSecret);
+		if (string.IsNullOrWhiteSpace(tokenResponse?.RefreshToken))
+			return BadRequest(new { message = "Refresh token is required" });
+
+		var user = await userService.GetUserByRefreshTokenAsync(tokenResponse.RefreshToken, token);
+
+		if (user == null || user.RefreshTokenExpiry == null || user.RefreshTokenExpiry < DateTime.UtcNow)
+			return Unauthorized(new { message = "Invalid or expired refresh token" });
+
+		var newAccessToken = TokenUtils.GenerateAccessToken(user, JwtSecret);
+		var newRefreshToken = TokenUtils.GenerateRefreshToken();
+		var newExpiry = DateTime.UtcNow.AddDays(7);
+
+		await userService.SetRefreshTokenAsync(user.Id, newRefreshToken, newExpiry, token);
 
 		var response = new Token
 		{
 			AccessToken = newAccessToken,
-			RefreshToken = tokenResponse.RefreshToken
+			RefreshToken = newRefreshToken
 		};
 
 		return Ok(response);

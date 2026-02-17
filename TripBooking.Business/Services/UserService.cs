@@ -9,10 +9,25 @@ public class UserService(IUserRepository userRepository) : IUserService
 	{
 		var user = await userRepository.GetUserByUsernameAsync(username, token);
 
-		// In a real application, you should hash the password and compare the hash instead of storing plain text passwords.
-		if (user == null || user.Password != password)
+		if (user == null)
+			return null;
+
+		var ok = Utils.CryptoUtils.VerifyPassword(password, user.Password);
+		if (!ok) 
 			return null;
 
 		return user;
+	}
+
+	public async Task SetRefreshTokenAsync(int userId, string refreshToken, DateTime expiry, CancellationToken token)
+	{
+		var hashed = Utils.CryptoUtils.HashRefreshToken(refreshToken);
+		await userRepository.SetRefreshTokenAsync(userId, hashed, expiry, token);
+	}
+
+	public async Task<User?> GetUserByRefreshTokenAsync(string refreshToken, CancellationToken token)
+	{
+		var hashed = Utils.CryptoUtils.HashRefreshToken(refreshToken);
+		return await userRepository.GetUserByRefreshTokenAsync(hashed, token);
 	}
 }

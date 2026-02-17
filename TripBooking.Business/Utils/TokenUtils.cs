@@ -16,10 +16,11 @@ public class TokenUtils
 
 		var tokenDescriptor = new SecurityTokenDescriptor
 		{
-			Subject = new ClaimsIdentity([
-				new Claim("id", user.Id.ToString()),
-				new Claim("perms", user.Permissions)
-			]),
+				Subject = new ClaimsIdentity(new[]
+				{
+					new Claim("id", user.Id.ToString()),
+					new Claim("perms", user.Permissions ?? string.Empty)
+				}),
 			Expires = DateTime.UtcNow.AddMinutes(15),
 			SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 		};
@@ -34,20 +35,5 @@ public class TokenUtils
 		using var rng = RandomNumberGenerator.Create();
 		rng.GetBytes(randomBytes);
 		return Convert.ToBase64String(randomBytes);
-	}
-
-	public static string GenerateAccessTokenFromRefreshToken(string refreshToken, string secret)
-	{
-		var tokenHandler = new JwtSecurityTokenHandler();
-		var key = Encoding.ASCII.GetBytes(secret);
-
-		var tokenDescriptor = new SecurityTokenDescriptor
-		{
-			Expires = DateTime.UtcNow.AddMinutes(15),
-			SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-		};
-
-		var token = tokenHandler.CreateToken(tokenDescriptor);
-		return tokenHandler.WriteToken(token);
 	}
 }
