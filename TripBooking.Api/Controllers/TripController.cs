@@ -9,11 +9,11 @@ namespace TripBooking.Api.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/trips")]
-[ApiVersion("1.0")]
 [Authorize]
 public class TripController(ITripService tripService) : ControllerBase
 {
 	[HttpPost]
+	[ApiVersion("1.0")]
 	[WriteClaimRequired]
 	public async Task<IActionResult> CreateAsync([FromBody] Trip trip, CancellationToken token)
 	{
@@ -26,6 +26,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 		
 	[HttpPut("{id:int}")]
+	[ApiVersion("1.0")]
 	[WriteClaimRequired]
 	public async Task<IActionResult> UpdateAsync(int id, [FromBody] Trip trip, CancellationToken token)
 	{
@@ -41,6 +42,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 
 	[HttpPatch("{id:int}")]
+	[ApiVersion("1.0")]
 	[WriteClaimRequired]
 	public async Task<IActionResult> PatchAsync(int id, [FromBody] Trip trip, CancellationToken token)
 	{
@@ -56,6 +58,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 
 	[HttpDelete("{id:int}")]
+	[ApiVersion("1.0")]
 	[WriteClaimRequired]
 	public async Task<IActionResult> DeleteAsync(int id, CancellationToken token)
 	{
@@ -68,6 +71,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 		
 	[HttpGet("{id:int}", Name = "GetTripById")]
+	[ApiVersion("1.0")]
 	public async Task<IActionResult> GetByIdAsync(int id, CancellationToken token = default)
 	{
 		var trip = await tripService.GetTripByIdAsync(id, token);
@@ -77,24 +81,25 @@ public class TripController(ITripService tripService) : ControllerBase
 		
 		return Ok(trip);
 	}
-		
-	[HttpGet("{country}")]
-	[MapToApiVersion("1.0")]
-	public async Task<IActionResult> GetByCountryAsync(string country, CancellationToken token)
-	{
-		var trips = await tripService.GetTripsByCountryAsync(country, token);
-		return Ok(trips);
-	}
 
 	[HttpGet("search")]
-	[MapToApiVersion("2.0")]
+	[ApiVersion("2.0")]
 	public async Task<IActionResult> SearchByCountryAsync([FromQuery] string country, CancellationToken token)
 	{
 		var trips = await tripService.GetTripsByCountryAsync(country, token);
 		return Ok(trips);
 	}
 		
+	[HttpGet("{country}")]
+	[ApiVersion("1.0")]
+	public async Task<IActionResult> GetByCountryAsync(string country, CancellationToken token)
+	{
+		var trips = await tripService.GetTripsByCountryAsync(country, token);
+		return Ok(trips);
+	}
+		
 	[HttpGet]
+	[ApiVersion("1.0")]
 	public async Task<IActionResult> GetAllAsync(CancellationToken token)
 	{
 		var trips = await tripService.GetTripsAsync(token);
