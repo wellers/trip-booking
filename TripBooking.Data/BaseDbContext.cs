@@ -7,4 +7,5 @@ public class BaseDbContext(DbContextOptions options) : DbContext(options)
 {
 	public DbSet<Trip> Trips { get; set; }
 	public DbSet<Registration> Registrations { get; set; }
+	public DbSet<User> Users { get; set; }
 }

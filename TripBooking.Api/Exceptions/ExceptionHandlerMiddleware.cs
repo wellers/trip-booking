@@ -12,7 +12,6 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
 		{
 			await next(httpContext);
 		}
-			
 		catch (ValidationException)
 		{
 			await SetBadRequest(httpContext, "There were validations errors in your request.");

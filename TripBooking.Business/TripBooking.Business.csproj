@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TripBooking.Data\TripBooking.Data.csproj" />
     <ProjectReference Include="..\TripBooking.Shared\TripBooking.Shared.csproj" />
   </ItemGroup>

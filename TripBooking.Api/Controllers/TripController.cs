@@ -1,16 +1,20 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TripBooking.Api.Attributes;
 using TripBooking.Business.Services;
 using TripBooking.Shared.Request;
 
 namespace TripBooking.Api.Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/[controller]")]
+[Route("api/v{version:apiVersion}/trips")]
 [ApiVersion("1.0")]
+[Authorize]
 public class TripController(ITripService tripService) : ControllerBase
 {
 	[HttpPost]
+	[WriteClaimRequired]
 	public async Task<IActionResult> CreateAsync([FromBody] Trip trip, CancellationToken token)
 	{
 		var created = await tripService.CreateTripAsync(trip, token);
@@ -22,6 +26,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 		
 	[HttpPut("{id:int}")]
+	[WriteClaimRequired]
 	public async Task<IActionResult> UpdateAsync(int id, [FromBody] Trip trip, CancellationToken token)
 	{
 		if (trip is null) 
@@ -36,6 +41,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 
 	[HttpPatch("{id:int}")]
+	[WriteClaimRequired]
 	public async Task<IActionResult> PatchAsync(int id, [FromBody] Trip trip, CancellationToken token)
 	{
 		if (trip is null)
@@ -50,6 +56,7 @@ public class TripController(ITripService tripService) : ControllerBase
 	}
 
 	[HttpDelete("{id:int}")]
+	[WriteClaimRequired]
 	public async Task<IActionResult> DeleteAsync(int id, CancellationToken token)
 	{
 		var deleted = await tripService.DeleteTripAsync(id, token);
