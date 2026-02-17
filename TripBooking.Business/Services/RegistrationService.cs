@@ -26,7 +26,7 @@ public class RegistrationService(IRegistrationRepository registrationRepository,
 		return item is null ? null : Shared.Response.Registration.FromDto(item);
 	}
 
-	public async Task<List<Shared.Response.Registration>> GetRegistrationsAsync(CancellationToken token)
+	public async Task<IEnumerable<Shared.Response.Registration>> GetRegistrationsAsync(CancellationToken token)
 	{
 		var list = await registrationRepository.GetRegistrationsAsync(token);
 		return list.Select(Shared.Response.Registration.FromDto).ToList();

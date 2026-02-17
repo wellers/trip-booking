@@ -5,7 +5,7 @@ namespace TripBooking.Data.Repositories;
 
 public class RegistrationRepository(BaseDbContext context) : IRegistrationRepository
 {
-	public async Task<List<Registration>> GetRegistrationsAsync(CancellationToken token) => 
+	public async Task<IEnumerable<Registration>> GetRegistrationsAsync(CancellationToken token) => 
 		await context.Registrations.Include(r => r.Trip).ToListAsync(token);
 
 	public async Task<Registration> AddRegistrationAsync(Registration registration, CancellationToken token)

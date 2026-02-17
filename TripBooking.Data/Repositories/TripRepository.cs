@@ -12,7 +12,7 @@ public class TripRepository(BaseDbContext context) : ITripRepository
 			.Include(t => t.Registrations);
 	}
 	
-	public async Task<List<Trip>> GetTripsAsync(CancellationToken token)
+	public async Task<IEnumerable<Trip>> GetTripsAsync(CancellationToken token)
 	{
 		var list = await AllTripsWithRegistrations(context).ToListAsync(token);
 		return list;
@@ -20,7 +20,7 @@ public class TripRepository(BaseDbContext context) : ITripRepository
 
 	public async Task<Trip?> GetTripByIdAsync(int id, CancellationToken token) => await AllTripsWithRegistrations(context).SingleOrDefaultAsync(trip => trip.Id == id, token);
 	
-	public async Task<List<Trip>> GetTripsByCountryAsync(string country, CancellationToken token)
+	public async Task<IEnumerable<Trip>> GetTripsByCountryAsync(string country, CancellationToken token)
 	{
 		var list = await AllTripsWithRegistrations(context)
 			.Where(trip => trip.Country == country)
