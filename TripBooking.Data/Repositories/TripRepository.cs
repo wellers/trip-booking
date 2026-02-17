@@ -45,7 +45,6 @@ public class TripRepository(BaseDbContext context) : ITripRepository
 		item.Description = trip.Description;
 		item.Country = trip.Country;
 
-		context.Update(item);
 		var changes = await context.SaveChangesAsync(token);
 		return changes > 0;
 	}
@@ -65,7 +64,6 @@ public class TripRepository(BaseDbContext context) : ITripRepository
 		if (!string.IsNullOrEmpty(trip.Country))
 			item.Country = trip.Country;
 
-		context.Update(item);
 		var changes = await context.SaveChangesAsync(token);
 		return changes > 0;
 	}
