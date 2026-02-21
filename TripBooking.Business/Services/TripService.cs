@@ -40,13 +40,13 @@ public class TripService(ITripRepository tripRepository) : ITripService
 		return trip is null ? null : Shared.Response.Trip.FromDto(trip);
 	}
 
-	public async Task<IEnumerable<Shared.Response.Trip>> GetTripsByCountryAsync(string country, CancellationToken token)
+	public async Task<IReadOnlyList<Shared.Response.Trip>> GetTripsByCountryAsync(string country, CancellationToken token)
 	{
 		var list = await tripRepository.GetTripsByCountryAsync(country, token);
 		return list.Select(Shared.Response.Trip.FromDto).ToList();
 	}
 
-	public async Task<IEnumerable<Shared.Response.Trip>> GetTripsAsync(CancellationToken token)
+	public async Task<IReadOnlyList<Shared.Response.Trip>> GetTripsAsync(CancellationToken token)
 	{
 		var list = await tripRepository.GetTripsAsync(token);
 		return list.Select(Shared.Response.Trip.FromDto).ToList();

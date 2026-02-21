@@ -29,7 +29,7 @@ public class RegisterController(IRegistrationService registrationService) : Cont
 	public async Task<IActionResult> GetAllAsync(CancellationToken token)
 	{
 		var registrations = await registrationService.GetRegistrationsAsync(token);
-			
+
 		return Ok(registrations);
 	}
 
