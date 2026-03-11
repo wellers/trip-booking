@@ -11,4 +11,5 @@ public interface ITripRepository
 	Task<bool> UpdateTripAsync(Trip trip, CancellationToken token);
 	Task<bool> PatchTripAsync(Trip trip, CancellationToken token);
 	Task<bool> DeleteTripAsync(int id, CancellationToken token);
+	Task<IEnumerable<Trip>> QueryTripsAsync(TripQuery trip, CancellationToken token);
 }

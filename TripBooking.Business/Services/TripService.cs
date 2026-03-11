@@ -51,4 +51,16 @@ public class TripService(ITripRepository tripRepository) : ITripService
 		var list = await tripRepository.GetTripsAsync(token);
 		return list.Select(Shared.Response.Trip.FromDto).ToList();
 	}
+
+	public async Task<IReadOnlyList<Shared.Response.Trip>> QueryTripsAsync(Shared.Request.TripQuery trip, CancellationToken token)
+	{
+		var list = await tripRepository.QueryTripsAsync(new Data.Entities.TripQuery 
+		{
+			Name = trip.Name,
+			Description = trip.Description,
+			Country = trip.Country
+		}, token);
+
+		return list.Select(Shared.Response.Trip.FromDto).ToList();
+	}
 }

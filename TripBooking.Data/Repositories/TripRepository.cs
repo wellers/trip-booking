@@ -23,7 +23,7 @@ public class TripRepository(BaseDbContext context) : ITripRepository
 	public async Task<IEnumerable<Trip>> GetTripsByCountryAsync(string country, CancellationToken token)
 	{
 		var list = await AllTripsWithRegistrations(context)
-			.Where(trip => trip.Country == country)
+			.Where(trip => trip.Country.Contains(country, StringComparison.OrdinalIgnoreCase))
 			.ToListAsync(token);
 		return list;
 	}
@@ -78,5 +78,16 @@ public class TripRepository(BaseDbContext context) : ITripRepository
 		var changes = await context.SaveChangesAsync(token);
 
 		return changes > 0;
+	}
+
+	public async Task<IEnumerable<Trip>> QueryTripsAsync(TripQuery trip, CancellationToken token)
+	{
+		var items = await AllTripsWithRegistrations(context).Where(t =>
+			(trip.Name == null || t.Name.Contains(trip.Name, StringComparison.OrdinalIgnoreCase))
+			&& (trip.Description == null || t.Description.Contains(trip.Description, StringComparison.OrdinalIgnoreCase))
+			&& (trip.Country == null || t.Country.Contains(trip.Country, StringComparison.OrdinalIgnoreCase))
+		).ToListAsync(token);
+
+		return items;
 	}
 }

@@ -9,4 +9,5 @@ public interface ITripService
 	Task<Shared.Response.Trip?> GetTripByIdAsync(int id, CancellationToken token);
 	Task<IReadOnlyList<Shared.Response.Trip>> GetTripsByCountryAsync(string country, CancellationToken token);
 	Task<IReadOnlyList<Shared.Response.Trip>> GetTripsAsync(CancellationToken token);
+	Task<IReadOnlyList<Shared.Response.Trip>> QueryTripsAsync(Shared.Request.TripQuery query, CancellationToken token);
 }

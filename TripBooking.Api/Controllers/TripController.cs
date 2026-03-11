@@ -82,9 +82,9 @@ public class TripController(ITripService tripService) : ControllerBase
 		return Ok(trip);
 	}
 
-	[HttpGet("search")]
+	[HttpGet("query")]
 	[ApiVersion("2.0")]
-	public async Task<IActionResult> SearchByCountryAsync([FromQuery] string country, CancellationToken token)
+	public async Task<IActionResult> QueryByCountryAsync([FromQuery] string country, CancellationToken token)
 	{
 		var trips = await tripService.GetTripsByCountryAsync(country, token);
 		return Ok(trips);
@@ -103,6 +103,14 @@ public class TripController(ITripService tripService) : ControllerBase
 	public async Task<IActionResult> GetAllAsync(CancellationToken token)
 	{
 		var trips = await tripService.GetTripsAsync(token);
+		return Ok(trips);
+	}
+
+	[HttpPost("query")]
+	[ApiVersion("3.0")]
+	public async Task<IActionResult> Query(TripQuery query, CancellationToken token)
+	{
+		var trips = await tripService.QueryTripsAsync(query, token);
 		return Ok(trips);
 	}
 }

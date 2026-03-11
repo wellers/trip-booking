@@ -1,0 +1,8 @@
+﻿namespace TripBooking.Data.Entities;
+
+public class TripQuery
+{
+	public string Name { get; set; } = "";
+	public string Description { get; set; } = "";
+	public string Country { get; set; } = "";
+}
