@@ -108,7 +108,7 @@ public class TripController(ITripService tripService) : ControllerBase
 
 	[HttpPost("query")]
 	[ApiVersion("3.0")]
-	public async Task<IActionResult> Query(TripQuery query, CancellationToken token)
+	public async Task<IActionResult> QueryAsync(TripQuery query, CancellationToken token)
 	{
 		var trips = await tripService.QueryTripsAsync(query, token);
 		return Ok(trips);
