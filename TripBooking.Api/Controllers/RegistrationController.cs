@@ -8,10 +8,10 @@ using TripBooking.Shared.Request;
 namespace TripBooking.Api.Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/register")]
+[Route("api/v{version:apiVersion}/registrations")]
 [ApiVersion("1.0")]
 [Authorize]
-public class RegisterController(IRegistrationService registrationService) : ControllerBase
+public class RegistrationController(IRegistrationService registrationService) : ControllerBase
 {
 	[HttpPost]
 	[WriteClaimRequired]
